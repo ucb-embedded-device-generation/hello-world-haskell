@@ -3,7 +3,7 @@ module Main where
 import Lib
 
 main :: IO ()
-main = print ( answer 10 0)
+main = print ( answer 0 0)
 
 -----------------------------------------------------------
 -- Infinite list implementation of fibs
@@ -23,8 +23,12 @@ fibs = 1 : 2 : zipWith (+) fibs (tail fibs)
 ---------------------------------------------------------
 answer :: Int -> Int -> Int
 answer index sum = 
-    if fibs!!index > 100 then sum
-    else answer (index + 1) (sum + (fibs!!index))
+  -- base case, terminate after values hit 4 mil and just return sum
+    if (fibs!!index > 4000000) then sum     
+  -- num is even, add it to running total
+    else if even (fibs!!index) then answer (index + 1) (sum + fibs!!index)
+  -- num is odd, dont add it and keep going
+    else answer (index + 1) sum
 
 -----------------------------------------------------------
 -- My implementation of fib, but it's not an infinite list
