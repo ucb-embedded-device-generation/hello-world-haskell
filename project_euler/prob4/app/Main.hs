@@ -3,7 +3,7 @@ module Main where
 import Lib
 
 main :: IO ()
-main = print (map palindromes ( (map digits (removeDuplicates ( listMultiplier[1..10] [1..10]) ) ) ) )
+main = print (discardFalse (zip (map palindromes ( (map digits (removeDuplicates ( listMultiplier[1..10] [1..10]) ) ) ) ) (removeDuplicates (listMultiplier[1..10] [1..10])) ) )
 -- main = print ( [2, 3, 1]  !!  ((length [2, 3, 1]) - 1) )
 
 -- multiply everything in x by everything in y
@@ -42,3 +42,9 @@ palindromes digits =
         then True && palindromes (tail (init digits))
     -- no longer valid
     else False
+
+-- discard all the tuples with FALSE since they aren't palindromes
+discardFalse :: [(Bool, Int)] -> [(Bool, Int)]
+discardFalse list = [x | x <- list, (fst x) == True]
+
+
