@@ -3,7 +3,8 @@ module Main where
 import Lib
 
 main :: IO ()
-main = print ( digits 123456789 [] )
+main = print (map palindromes ( (map digits (removeDuplicates ( listMultiplier[1..10] [1..10]) ) ) ) )
+-- main = print ( [2, 3, 1]  !!  ((length [2, 3, 1]) - 1) )
 
 -- multiply everything in x by everything in y
 -- does generate duplicates though
@@ -22,11 +23,22 @@ removeDuplicates (x:xs)
     | otherwise = x : removeDuplicates xs -- x is not duplicate
 
 -- convert number to list digits
-digits :: Int -> [Int] -> [Int]
-digits x digitsList = 
+digits :: Int -> [Int]
+digits x = digitsHelper x [] 
+
+digitsHelper :: Int -> [Int] -> [Int]
+digitsHelper x digitsList = 
     if x == 0 then digitsList
-    else digits (div x 10) ((mod x 10) : digitsList )
+    else digitsHelper (div x 10) ((mod x 10) : digitsList )
 
 -- palindrome detection, takes in list of digits
--- palindromes :: [Int] -> Bool
--- palindromes = False
+palindromes :: [Int] -> Bool
+palindromes digits = 
+    -- base case
+    if (length digits == 0) || (length digits == 1) 
+        then True
+    -- still valid  
+    else if (head digits) == (last digits) 
+        then True && palindromes (tail (init digits))
+    -- no longer valid
+    else False
